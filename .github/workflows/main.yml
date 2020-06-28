@@ -149,7 +149,7 @@ jobs:
         if: always() && github.event_name != 'pull_request'
         run: |
           rm -f ${HOME}/.docker/config.json
-buildx-microsoft:
+  buildx-microsoft:
     runs-on: ubuntu-latest
     steps:
       -
@@ -218,7 +218,7 @@ buildx-microsoft:
         if: always() && github.event_name != 'pull_request'
         run: |
           rm -f ${HOME}/.docker/config.json
-buildx-google:
+  buildx-google:
     runs-on: ubuntu-latest
     steps:
       -
@@ -287,7 +287,7 @@ buildx-google:
         if: always() && github.event_name != 'pull_request'
         run: |
           rm -f ${HOME}/.docker/config.json
-buildx-linkedin:
+  buildx-linkedin:
     runs-on: ubuntu-latest
     steps:
       -
@@ -356,7 +356,7 @@ buildx-linkedin:
         if: always() && github.event_name != 'pull_request'
         run: |
           rm -f ${HOME}/.docker/config.json
-buildx-facebook:
+  buildx-facebook:
     runs-on: ubuntu-latest
     steps:
       -
@@ -425,7 +425,7 @@ buildx-facebook:
         if: always() && github.event_name != 'pull_request'
         run: |
           rm -f ${HOME}/.docker/config.json
-buildx-instafollowers:
+  buildx-instafollowers:
     runs-on: ubuntu-latest
     steps:
       -
