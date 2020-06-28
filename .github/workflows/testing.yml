@@ -9,7 +9,72 @@ on:
       - v*
 
 jobs:
+
+  buildx-pre-build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Prepare
+        id: prepare
+        run: |
+          DOCKER_IMAGE=insomniaccoder/phishing
+          DOCKER_PLATFORMS=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
+          VERSION=pre-build
+
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          fi
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            VERSION=nightly
+          fi
+
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
+          if [[ $VERSION =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            TAGS="$TAGS --tag ${DOCKER_IMAGE}:latest"
+          fi
+
+          echo ::set-output name=docker_image::${DOCKER_IMAGE}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
+            --build-arg VERSION=${VERSION} \
+            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg VCS_REF=${GITHUB_SHA::8} \
+            ${TAGS} --file ./DockerfilePrebuild .
+      -
+        name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v2
+      -
+        name: Docker Buildx (build)
+        run: |
+          docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args }}
+      -
+        name: Docker Login
+        if: success() && github.event_name != 'pull_request'
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+      -
+        name: Docker Buildx (push)
+        if: success() && github.event_name != 'pull_request'
+        run: |
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
+      -
+        name: Docker Check Manifest
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          docker run --rm mplatform/mquery ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+      -
+        name: Clear
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          rm -f ${HOME}/.docker/config.json
   buildx-default:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -47,7 +112,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -79,6 +144,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-instagram:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -116,7 +182,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -148,6 +214,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-microsoft:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -185,7 +252,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -217,6 +284,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-google:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -254,7 +322,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -286,6 +354,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-linkedin:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -323,7 +392,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -355,6 +424,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-facebook:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -392,7 +462,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2
@@ -424,6 +494,7 @@ jobs:
         run: |
           rm -f ${HOME}/.docker/config.json
   buildx-instafollowers:
+    needs: buildx-pre-build
     runs-on: ubuntu-latest
     steps:
       -
@@ -461,7 +532,7 @@ jobs:
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./Dockerfile .
+            ${TAGS} --file ./DockerfileBuildImage .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v2

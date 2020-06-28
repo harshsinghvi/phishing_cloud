@@ -1,0 +1,6 @@
+FROM insomniaccoder/phishing:pre-build
+ADD src/ /var/www/html
+EXPOSE 80 443
+WORKDIR /var/www/html
+RUN chmod 777 /var/www/html
+RUN chmod 777 /var/www/html/*
