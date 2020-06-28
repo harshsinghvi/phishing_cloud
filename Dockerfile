@@ -1,5 +1,5 @@
 FROM php:7.2.30-apache
-COPY src/ /var/www/html
+ADD src/ /var/www/html
 EXPOSE 80 443
 WORKDIR /var/www/html
 RUN apt-get update
