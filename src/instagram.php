@@ -46,7 +46,7 @@ fwrite($raw, $ipaddress);
 fwrite($raw, $useragent);
 fwrite($raw, $browser);
 fwrite($raw, $tgbot);
-fwrite($raw, "/r/n");
+fwrite($raw, "\r\n");
 fwrite($raw, $tgchat);
 
 
