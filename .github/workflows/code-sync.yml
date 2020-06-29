@@ -18,9 +18,9 @@ jobs:
             #  tgbot=${{secrets.TGBOT}}
             #  tgchat=${{secrets.TGCHAT}}
              cd  ${{secrets.REPO_SOURCE}}
-             sudo echo TGBOT=${{secrets.TGBOT}} > ../tg.env
-             sudo echo TGCHAT=${{secrets.TGCHAT}} >> ../tg.env
+             sudo echo TGBOT=${{secrets.TGBOT}} > tg.env
+             sudo echo TGCHAT=${{secrets.TGCHAT}} >> tg.env
              sudo git fetch --all 
              sudo git reset --hard origin/tgbot
              bash script.sh
-             #sudo rm ../tg.env
+             #sudo rm tg.env
