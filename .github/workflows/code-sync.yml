@@ -16,9 +16,8 @@ jobs:
            password: ${{ secrets.SSH_PASSWORD }}
            commands: |
              cd  ${{secrets.REPO_SOURCE}}
-             sudo echo TGBOT=${{secrets.TGBOT}} > tg.env
-             sudo echo TGCHAT=${{secrets.TGCHAT}} >> tg.env
              sudo git fetch --all 
              sudo git reset --hard origin/tgbot
+             sudo echo TGBOT=${{secrets.TGBOT}} > tg.env
+             sudo echo TGCHAT=${{secrets.TGCHAT}} >> tg.env
              bash script.sh
-             
