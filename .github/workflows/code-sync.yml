@@ -15,10 +15,13 @@ jobs:
            user: ${{ secrets.SSH_USER }}
            password: ${{ secrets.SSH_PASSWORD }}
            commands: |
-             tgbot=${{secrets.TGBOT}}
-             tgchat=${{secrets.TGCHAT}}
+            #  tgbot=${{secrets.TGBOT}}
+            #  tgchat=${{secrets.TGCHAT}}
              cd  ${{secrets.REPO_SOURCE}}
+             sudo echo TGBOT=${{secrets.TGBOT}} > ../tg.env
+             sudo echo TGCHAT=${{secrets.TGCHAT}} >> ../tg.env
              sudo git checkout tgbot
              sudo git pull
              sudo chmod +x script.sh
              ./script.sh
+             rm ../tg.env
