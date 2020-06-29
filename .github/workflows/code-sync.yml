@@ -8,7 +8,6 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v2
         - name: Run a command remotely
           uses: docker://evaneos/ssh-action:0.1.0
           with:
@@ -16,8 +15,8 @@ jobs:
            user: ${{ secrets.SSH_USER }}
            password: ${{ secrets.SSH_PASSWORD }}
            commands: |
-             tgbot={{secrets.TGBOT}}
-             tgchat={{secrets.TGCHAT}}
+             tgbot=${{secrets.TGBOT}}
+             tgchat=${{secrets.TGCHAT}}
              cd  ${{secrets.REPO_SOURCE}}
              sudo git checkout tgbot
              sudo git pull
