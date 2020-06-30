@@ -15,6 +15,7 @@ jobs:
            user: ${{ secrets.SSH_USER }}
            password: ${{ secrets.SSH_PASSWORD }}
            commands: |
+             sudo su
              cd  ${{secrets.REPO_SOURCE}}
              sudo rm tg.env
              sudo git fetch --all 
