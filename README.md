@@ -52,7 +52,7 @@ docker -t <image_name> .
 <a href="https://mirailabs.io/blog/multiarch-docker-with-buildx/"> Refer this guide </a>
 
 
-* My Website : https://harshsinghvi.github.io
+* My Website : https://harshsinghvi.com
 
 * My GitHub Profile : https://github.com/harshsinghvi/sms-bomb-telegram-bot-docker
 
